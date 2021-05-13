@@ -1,9 +1,10 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerSwing : MonoBehaviour
-{
+public class PlayerSwing : MonoBehaviour  {
+   
+    public Ball ball;
     public Animator animator;
     public GameObject swingPoint;
     public Collider2D swingArea;
@@ -11,15 +12,6 @@ public class PlayerSwing : MonoBehaviour
     bool swinging;
     float swingTimer = 0;
     float swingCD = 2f;
-
-    void Start() 
-    {
-        animator = gameObject.GetComponent<Animator>();
-
-        swingArea.enabled = false;
-        swinging = false;
-
-    }
 
     void Update() 
     {
@@ -30,6 +22,11 @@ public class PlayerSwing : MonoBehaviour
     {         
         if(Input.GetMouseButtonDown(0) && !swinging)
         {
+            if(PlayerPaddle.ableToSwing)
+            {
+                ball.xSpeed *= -1;
+                ball.ySpeed *= -1;
+            }
             swinging = true;
             swingArea.enabled = true;
             swingTimer = swingCD;
@@ -50,5 +47,4 @@ public class PlayerSwing : MonoBehaviour
             }
         }
     }
-
-}
+} 

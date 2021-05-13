@@ -7,7 +7,7 @@ public class ReturnAI : MonoBehaviour
     public Transform returnPosition;
     public Animator animator;
 
-    public Collider2D netCollider;
+    public Collider2D enemySideCollider;
     public Collider2D ballCollider;
 
     BoxCollider2D enemyCollider;
@@ -15,56 +15,48 @@ public class ReturnAI : MonoBehaviour
     public GameObject ball;
     public Ball tennisBall;
 
-    bool returnBall = false;
-    float speed = 5f;
-
-    float distance;
-
     void Start() 
     {
         enemyCollider = gameObject.GetComponent<BoxCollider2D>();
         animator = gameObject.GetComponent<Animator>();
+        enemySideCollider.isTrigger = true;
+        enemyCollider.isTrigger = true;
     }
     
     void Update() 
     {   
-        reposition();
+        returnBall();
     }
 
-    void onOtherSide()
+    bool onOtherSide()
     {
-        if(netCollider.IsTouching(ballCollider))
+        if(enemySideCollider.IsTouching(ballCollider))
         {
-            returnBall = true;
-            Debug.Log("pass net");
+            return true;
         }
-        else returnBall = false;
+        return false;
     }
 
-    void moveTowardsBall() 
-    { 
-    }
-
-    void checkDistance() 
+    void returnBall() 
     {
-        distance = Vector3.Distance(transform.position, ball.transform.position);
+        if(onOtherSide())
+        {
+            transform.position = Vector2.MoveTowards(enemyCollider.transform.position, ball.transform.position, 1.5f * Time.fixedDeltaTime);
+        }
+        else
+        {
+            if(Vector2.Distance(transform.position, returnPosition.position) != 0)
+            {
+                transform.position = Vector2.MoveTowards(enemyCollider.transform.position, returnPosition.position, 1.5f * Time.fixedDeltaTime);
+            }
+        }
     }
-   
-    void reposition()
-    {
-        if(enemyCollider.IsTouching(ballCollider) && !returnBall) 
-        {
-            returnBall = true;
-            transform.position = new Vector3(transform.position.x, transform.position.y - 0.05f, transform.position.z);
 
-            animator.SetTrigger("swing");
-            tennisBall.xSpeed *= -1;
-            tennisBall.ySpeed *= -1;
-        }
-        else if(enemyCollider.IsTouching(ballCollider) && returnBall)
-        {
-            transform.position = Vector3.MoveTowards(transform.position, returnPosition.position, 3f * Time.fixedDeltaTime);
-        }
-        transform.position = Vector3.MoveTowards(transform.position, ball.transform.position, 1.5f * Time.fixedDeltaTime);
+    void OnTriggerEnter2D(Collider2D other) 
+    {
+        //transform.position = new Vector2(transform.position.x, transform.position.y - 0.05f);
+        animator.SetTrigger("swing");
+        tennisBall.xSpeed *= -1;
+        tennisBall.ySpeed *= -1;
     }
 }
