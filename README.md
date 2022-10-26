@@ -1,3 +1,3 @@
 # TennisHero
 
-The drawings and code are for the game I am working on called TennisHero. It is a highscore game that challenges the player to dodge obstacles and play tennis. Certain achivements lead to different maps and skins for the user to use to create their own characters.
+This is my first ever game concept and the idea that got me into game design. You play in a world where power comes from you tennis skills. The more skills you acquire the different worlds and enemies you face.
